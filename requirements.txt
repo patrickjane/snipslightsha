@@ -1,0 +1,7 @@
+# Bindings for the hermes protocol 
+hermes-python>=0.1
+
+# More dependency goes here.. 
+
+requests>=2.22.0
+toml>=0.10.0
