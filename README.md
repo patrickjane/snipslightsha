@@ -26,17 +26,17 @@ Die App ruft automatisch entsprechende Services auf, um Lichter, Gruppen und Aut
 Die Räume und Lampen werden von der App automatisch in Home Assistant Entities übersetzt, und zwar nach folgendem Schema:
 
 1) Bei Nennung von Raum oder ohne Angabe von Raum/Objekt (-> über `siteID`):    
-   Entity-ID ist `group.lights_{<RAUM | SITEID>}` (Lowercase + Ersetzung von Umlauten)
+   Entity-ID ist `group.lights_{<RAUM | SITEID>}` (Lowercase + Ersetzung von Umlauten)    
    Service ist `homeassistant.turn_on`/`homeassistant.turn_off`
 
 2) Bei Nennung eines Objekts ("Stehlampe"):    
-   Entity-ID ist `light.{<OBJEKT>}` (Lowercase + Ersetzung von Umlauten)
+   Entity-ID ist `light.{<OBJEKT>}` (Lowercase + Ersetzung von Umlauten)    
    Service ist `light.turn_on`/`light.turn_off`
    
 3) Für den Intent `s710:keepLightOn`/`s710:keepLightOff` werden Automatisierungen aktiviert/deaktiviert:    
-   Entity-ID ist `automation.lights_on_{<RAUM | OBJEKT | SITEID>}"` (Lowercase + Ersetzung von Umlauten)
-   und
-   `automation.lights_off_{<RAUM | OBJEKT | SITEID>}`
+   Entity-ID ist `automation.lights_on_{<RAUM | OBJEKT | SITEID>}"` (Lowercase + Ersetzung von Umlauten)    
+   und    
+   `automation.lights_off_{<RAUM | OBJEKT | SITEID>}`    
    Service ist `automation.turn_on` / `automation.turn_off`
    
 #### Beispiele
