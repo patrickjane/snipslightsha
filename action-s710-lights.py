@@ -128,6 +128,7 @@ class LightsHASS(object):
         site_id = intent_message.site_id
         room_id = None
         lamp_id = None
+        brightness = None
 
         # extract mandatory information (lamp_id, room_id)
 
@@ -139,12 +140,14 @@ class LightsHASS(object):
                 if len(intent_message.slots.roomName):
                     room_id = intent_message.slots.roomName.first().value
                     room_id = room_id.lower().replace('ä', 'ae').replace('ü','ue').replace('ö', 'oe')
+                if len(intent_message.slots.brightness):
+                    brightness = int(intent_message.slots.brightness.first().value)
         except:
             pass
 
         # get corresponding home assistant service-url + payload
 
-        service, data = self.params_of(room_id, lamp_id, site_id, intent_name)
+        service, data = self.params_of(room_id, lamp_id, site_id, brightness, intent_name)
 
         # fire the service using HA REST API
 
@@ -152,19 +155,43 @@ class LightsHASS(object):
           if self.debug:
             print("Intent {}: Firing service [{} -> {}] with [{}]".format(intent_name, self.hass_host, service, data))
 
-          r = requests.post(self.hass_host + service, json = data , headers = self.hass_headers)
+          r = requests.post(self.hass_host + service, json = data, headers = self.hass_headers)
 
-          if r.status_code == 200:
-            hermes.publish_start_session_notification(intent_message.site_id, self.confirmation_success, "")
-          else:
-            hermes.publish_start_session_notification(intent_message.site_id, self.confirmation_failure, "")
+          if r.status_code != 200:
+            return self.done(hermes, intent_message, r)
+
+          # second additional service? (keep light on = disable automation + turn on light)
+
+          if intent_name == 's710:keepLightOn':
+            service, data = self.params_of(room_id, lamp_id, site_id, brightness, "s710:turnOnLight")
+
+            r = requests.post(self.hass_host + service, json = data, headers = self.hass_headers)
+
+          elif intent_name == 's710:keepLightOff':
+            service, data = self.params_of(room_id, lamp_id, site_id, brightness, "s710:turnOffLight")
+
+            r = requests.post(self.hass_host + service, json = data, headers = self.hass_headers)
+
+          self.done(hermes, intent_message, r)
+
         else:
           print("Intent {}/parameters not recognized, ignoring".format(intent_name))
 
     # -------------------------------------------------------------------------
+    # done
+
+    def done(self, hermes, intent_message, request_object):
+      if request_object.status_code == 200:
+        hermes.publish_start_session_notification(intent_message.site_id, self.confirmation_success, "")
+      else:
+        hermes.publish_start_session_notification(intent_message.site_id, self.confirmation_failure, "")
+
+    # -------------------------------------------------------------------------
     # params_of
 
-    def params_of(self, room_id, lamp_id, site_id, intent_name):
+    def params_of(self, room_id, lamp_id, site_id, brightness, intent_name):
+
+      # turn on/off lights
 
       if intent_name == 's710:turnOnLight':
         if lamp_id is not None:
@@ -182,19 +209,23 @@ class LightsHASS(object):
         else:
           return (HASS_GROUP_OFF_SVC, {'entity_id': 'group.lights_{}'.format(site_id) })
 
+      # control all lights
+
       if intent_name == 's710:turnOnAllLights':
         return (HASS_GROUP_ON_SVC, {'entity_id': 'group.all_lights' })
-      
+
       if intent_name == 's710:turnOffAllLights':
         return (HASS_GROUP_OFF_SVC, {'entity_id': 'group.all_lights' })
 
+      # keep lights on/off (via automation enable/disable + light on/off)
+
       if intent_name == 's710:keepLightOn':
         if lamp_id is not None:
-          return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_on_{}'.format(lamp_id) })
+          return (HASS_AUTOMATION_OFF_SVC, {'entity_id': 'automation.lights_off_{}'.format(lamp_id) })
         elif room_id is not None:
-          return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_on_{}'.format(room_id) })
+          return (HASS_AUTOMATION_OFF_SVC, {'entity_id': 'automation.lights_off_{}'.format(room_id) })
         else:
-          return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_on_{}'.format(site_id) })
+          return (HASS_AUTOMATION_OFF_SVC, {'entity_id': 'automation.lights_off_{}'.format(site_id) })
 
       if intent_name == 's710:keepLightOff':
         if lamp_id is not None:
@@ -203,6 +234,20 @@ class LightsHASS(object):
           return (HASS_AUTOMATION_OFF_SVC, {'entity_id': 'automation.lights_on_{}'.format(room_id) })
         else:
           return (HASS_AUTOMATION_OFF_SVC, {'entity_id': 'automation.lights_on_{}'.format(site_id) })
+
+      if intent_name == 's710:enableAutomatic':
+        if lamp_id is not None:
+          return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_on_{}'.format(lamp_id) })
+        elif room_id is not None:
+          return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_on_{}'.format(room_id) })
+        else:
+          return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_on_{}'.format(site_id) })
+
+      # set light brightness
+
+      if intent_name == 's710:setLightBrightness':
+        if lamp_id is not None and brightness is not None:
+          return (HASS_LIGHTS_ON_SVC, {'entity_id': 'light.{}'.format(lamp_id), 'brightness': brightness  })
 
       return (None, None)
 
