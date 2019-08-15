@@ -32,6 +32,7 @@ Die App umfasst folgende Intents:
 - `s710:keepLightOn` - Einschalten einer Lichtquelle + automatisches Abschalten deaktivieren
 - `s710:keepLightOff` - Ausschalten einer Lichtquelle + automatisches Einschalten deaktivieren
 - `s710:setLightBrightness` - Einschalten einer Lichtquelle + setzen der Helligkeit
+- `s710:enableAutomatic` - Die automatische Steuerung einer Lichtquelle (wieder) aktivieren
 
 Die App kann dabei über 3 Arten angesteuert werden:
 
