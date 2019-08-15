@@ -57,6 +57,6 @@ Die Räume und Lampen werden von der App automatisch in Home Assistant Entities 
 - Intent ist: `s710:keepLightOn`
 - Raum ist "Schlafzimmer"
 - -> HA Service 1 ist `automation.turn_off`
-- -> Payload 1 ist: `{ "entity_id": "automation.lights_off_schlafzimmer" }` (Licht nicht mehr automatisch anmachen)
+- -> Payload 1 ist: `{ "entity_id": "automation.lights_off_schlafzimmer" }` (Licht nicht mehr automatisch ausmachen)
 - -> HA Service 2 ist `homeassistant.turn_on`
 - -> Payload 2 ist: `{ "entity_id": "group.lights_wohnzimmer" }` (aber Licht anmachen)
