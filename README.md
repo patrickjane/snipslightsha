@@ -2,13 +2,15 @@
 
 App zur Sprachsteuerung von Lampen über Home Assistant (https://www.home-assistant.io/). Nutzt die Home Assistant REST API um Lichter/Lampen ein/auszuschalten, sowie entsprechende Automatisierungen ein/auszuschalten ("Hey Snips, lass das Licht im Flur an"). 
 
-### Installation
+## Installation
 
 #### 1) Home Assistant Access Token anlegen
 
-Im Home Assistant Web-GUI auf das Profil klicken, und dort (siehe auch: https://www.home-assistant.io/docs/authentication/#your-account-profile) unter **Long-Lived Access Tokens** einen Token erstellen. Dieser wird als Konfigurationsparameter für die Snips-App benötigt
+Im Home Assistant Web-GUI auf das Profil klicken, und dort (siehe auch: https://www.home-assistant.io/docs/authentication/#your-account-profile) unter **Long-Lived Access Tokens** einen Token erstellen. Dieser wird als Konfigurationsparameter für die Snips-App benötigt.
 
 #### 2) Installation der Snips-App
+
+tbd
 
 # Parameter
 
