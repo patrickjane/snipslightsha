@@ -21,6 +21,26 @@ Die App bentöigt die folgenden Parameter:
 - `hass_host`: Hostname der Home Assistant Installation inkl. Protokoll und Port (z.b. `http://10.0.0.5:8123`)
 - `hass_token`: Der Access-Token der in Schritt Installation/1) erstellt wurde
 
+# Funktionen
+
+Die App umfasst folgende Intents:
+
+- `s710:turnOnLight` - Einschalten einer Lichtquelle
+- `s710:turnOffLight` - Ausschalten einer Lichtquelle
+- `s710:turnOnAllLights` - Einschalten aller Lichtquellen (automatische Home Assistant Gruppe `group.all_lights`) 
+- `s710:turnOffAllLights` - Ausschalten aller Lichtquellen (automatische Home Assistant Gruppe `group.all_lights`)
+- `s710:keepLightOn` - Einschalten einer Lichtquelle + automatisches Abschalten deaktivieren
+- `s710:keepLightOff` - Ausschalten einer Lichtquelle + automatisches Einschalten deaktivieren
+- `s710:setLightBrightness` - Einschalten einer Lichtquelle + setzen der Helligkeit
+
+Die App kann dabei über 3 Arten angesteuert werden:
+
+- Objektname ("Schalte die *Stehlampe* an)
+- Raumname ("Schalte das Licht in der *Küche* an")
+- Über Snips `siteID` ("Mach das Licht an")
+
+Letztes funktioniert entsprechend nur, wenn in den gewünschten Räumen Snips-Satelliten installiert und dem entsprechenden Raum zugeordnet sind. 
+
 # Integration Home Assistant
 
 Die App ruft automatisch entsprechende Services auf, um Lichter, Gruppen und Automatisierungen anzusteuern. Da es keine Zuordnung per Konfiguration gibt, müssen in Home Assistant entsprechende Gruppen angelegt werden, bzw. die light-Entities entsprechend benannt werden.
