@@ -1,4 +1,7 @@
-# no section for preset values
+[global]
+confirmation_success=Okay
+confirmation_failure=Sorry
+hass_host=http://localhost:8123
 
 [secret]
-#empty value for secret values
+hass_token=

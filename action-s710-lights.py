@@ -79,17 +79,17 @@ class LightsHASS(object):
         except Exception as e:
           print("Failed to read /etc/snips.toml ({})".format(e))
 
-        self.hass_host = self.config['secret']['hass_host']
         self.hass_token = self.config['secret']['hass_token']
+        self.hass_host = self.config['global']['hass_host']
         self.hass_headers = { 'Content-Type': 'application/json', 'Authorization': "Bearer " + self.hass_token }
 
-        if 'confirmation_success' in self.config['secret']:
-          self.confirmation_success = self.config['secret']['confirmation_success']
+        if 'confirmation_success' in self.config['global']:
+          self.confirmation_success = self.config['global']['confirmation_success']
         else:
           self.confirmation_success = "Bestätige"
 
-        if 'confirmation_failure' in self.config['secret']:
-          self.confirmation_failure = self.config['secret']['confirmation_failure']
+        if 'confirmation_failure' in self.config['global']:
+          self.confirmation_failure = self.config['global']['confirmation_failure']
         else:
           self.confirmation_failure = "Ausführung nicht möglich"
 
