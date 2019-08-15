@@ -10,7 +10,7 @@ Im Home Assistant Web-GUI auf das Profil klicken, und dort (siehe auch: https://
 
 #### 2) Installation der Snips-App
 
-### Parameter
+# Parameter
 
 Die App bentöigt die folgenden Parameter:
 
@@ -19,7 +19,7 @@ Die App bentöigt die folgenden Parameter:
 - `hass_host`: Hostname des Home Assistant Installation inkl. Protokoll und Port (z.b. `http://10.0.0.5:8123`)
 - `hass_token`: Der Access-Token der in Schritt Installation/1) erstellt wurde
 
-### Integration Home Assistant
+# Integration Home Assistant
 
 Die App ruft automatisch entsprechende Services auf, um Lichter, Gruppen und Automatisierungen anzusteuern. Da es keine Zuordnung per Konfiguration gibt, müssen in Home Assistant entsprechende Gruppen angelegt werden, bzw. die light-Entities entsprechend benannt werden.
 
