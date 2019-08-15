@@ -39,7 +39,7 @@ Die App kann dabei über 3 Arten angesteuert werden:
 - Raumname ("Schalte das Licht in der *Küche* an")
 - Über Snips `siteID` ("Mach das Licht an")
 
-Letztes funktioniert entsprechend nur, wenn in den gewünschten Räumen Snips-Satelliten installiert und dem entsprechenden Raum zugeordnet sind. 
+Letztes funktioniert entsprechend nur, wenn in den gewünschten Räumen Snips-Satelliten installiert und dem entsprechenden Raum zugeordnet sind. Snips erkennt dann, in welchem Raum das Kommando erfolgt, und übermittelt dies als `siteID` an die App, was dort wiederrum als Raumname für die Ansteuerung an Home Assistant verwendet wird.
 
 # Integration Home Assistant
 
