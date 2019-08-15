@@ -172,6 +172,11 @@ class LightsHASS(object):
 
             r = requests.post(self.hass_host + service, json = data, headers = self.hass_headers)
 
+          elif intent_name == 's710:enableAutomatic':
+            service, data = self.params_of(room_id, lamp_id, site_id, brightness, "s710:enableAutomaticOff")
+
+            r = requests.post(self.hass_host + service, json = data, headers = self.hass_headers)
+
           self.done(hermes, intent_message, r)
 
         else:
@@ -243,11 +248,19 @@ class LightsHASS(object):
         else:
           return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_on_{}'.format(site_id) })
 
+      if intent_name == 's710:enableAutomaticOff':
+        if lamp_id is not None:
+          return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_off_{}'.format(lamp_id) })
+        elif room_id is not None:
+          return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_off_{}'.format(room_id) })
+        else:
+          return (HASS_AUTOMATION_ON_SVC, {'entity_id': 'automation.lights_off_{}'.format(site_id) })
+
       # set light brightness
 
       if intent_name == 's710:setLightBrightness':
         if lamp_id is not None and brightness is not None:
-          return (HASS_LIGHTS_ON_SVC, {'entity_id': 'light.{}'.format(lamp_id), 'brightness': brightness  })
+          return (HASS_LIGHTS_ON_SVC, {'entity_id': 'light.{}'.format(lamp_id), 'brightness': brightness })
 
       return (None, None)
 
