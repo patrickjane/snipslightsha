@@ -64,6 +64,8 @@ Die Räume und Lampen werden von der App automatisch in Home Assistant Entities 
    
 Raumnamen und Objekte werden in Kleinbuchstaben umgewandelt, und Umlaute werden ersetzt (ä -> ae, ü -> ue, ö -> oe).
 
+<img src="example.png" width="490" height="785" />
+
 #### Beispiele
 
 *"Hey Snips, Mach die Stehlampe an"*    
