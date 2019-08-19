@@ -187,9 +187,9 @@ class LightsHASS(object):
 
     def done(self, hermes, intent_message, request_object):
       if request_object.status_code == 200:
-        hermes.publish_start_session_notification(intent_message.site_id, self.confirmation_success, "")
+        hermes.publish_end_session(intent_message.site_id, self.confirmation_success)
       else:
-        hermes.publish_start_session_notification(intent_message.site_id, self.confirmation_failure, "")
+        hermes.publish_end_session(intent_message.site_id, self.confirmation_failure)
 
     # -------------------------------------------------------------------------
     # params_of
