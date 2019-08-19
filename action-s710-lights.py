@@ -56,6 +56,7 @@ class LightsHASS(object):
     def __init__(self, debug = False):
 
         self.debug = debug
+        self.enable_confirmation = False
 
         # parameters
 
@@ -92,6 +93,9 @@ class LightsHASS(object):
           self.confirmation_failure = self.config['global']['confirmation_failure']
         else:
           self.confirmation_failure = "Ausführung nicht möglich"
+
+        if 'enable_confirmation' in self.config['global'] and self.config['global']['enable_confirmation'] == "True":
+          self.enable_confirmation = True
 
         if self.debug:
           print("Connecting to {}@{} ...".format(self.mqtt_user, self.mqtt_host))
@@ -186,10 +190,12 @@ class LightsHASS(object):
     # done
 
     def done(self, hermes, intent_message, request_object):
-      if request_object.status_code == 200:
-        hermes.publish_end_session(intent_message.site_id, self.confirmation_success)
+      if not self.enable_confirmation:
+        hermes.publish_end_session(intent_message.session_id, "")
+      elif request_object.status_code == 200:
+        hermes.publish_end_session(intent_message.session_id, self.confirmation_success)
       else:
-        hermes.publish_end_session(intent_message.site_id, self.confirmation_failure)
+        hermes.publish_end_session(intent_message.session_id, self.confirmation_failure)
 
     # -------------------------------------------------------------------------
     # params_of

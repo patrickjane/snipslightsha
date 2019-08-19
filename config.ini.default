@@ -1,6 +1,7 @@
 [global]
 confirmation_success=Okay
 confirmation_failure=Sorry
+enable_confirmation=False
 hass_host=http://localhost:8123
 
 [secret]
