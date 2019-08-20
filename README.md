@@ -20,6 +20,7 @@ Die App bentöigt die folgenden Parameter:
 
 - `confirmation_success`: Text der gesprochen wird, nachdem eine Aktion erfolgreich durchgeführt wurde
 - `confirmation_failure`: Text der gesprochen wird, nachdem eine Aktion nicht durchgeführt werden konnte
+- `enable_confirmation`: TTS Bestätigung aktivieren/deaktivieren
 - `hass_host`: Hostname der Home Assistant Installation inkl. Protokoll und Port (z.b. `http://10.0.0.5:8123`)
 - `hass_token`: Der Access-Token der in Schritt Installation/1) erstellt wurde
 
