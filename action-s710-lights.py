@@ -28,6 +28,7 @@
 import io
 import toml
 import requests
+from os import environ
 
 from snipsTools import SnipsConfigParser
 from hermes_python.hermes import Hermes
@@ -80,8 +81,14 @@ class LightsHASS(object):
         except Exception as e:
           print("Failed to read /etc/snips.toml ({})".format(e))
 
-        self.hass_token = self.config['secret']['hass_token']
-        self.hass_host = self.config['global']['hass_host']
+        if 'hass_token' in self.config['secret']:
+          self.hass_token = self.config['secret']['hass_token']
+        elif 'HASSIO_TOKEN' in eviron:
+          self.hass_token = environ['HASSIO_TOKEN']
+        if 'hass_host' in self.config['global']:
+          self.hass_host = self.config['global']['hass_host']
+        elif self.hass_token is not None and 'HASSIO_TOKEN' in eviron:
+            self.hass_host = 'http://hassio/homeassistant/api'
         self.hass_headers = { 'Content-Type': 'application/json', 'Authorization': "Bearer " + self.hass_token }
 
         if 'confirmation_success' in self.config['global']:
