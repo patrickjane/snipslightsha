@@ -28,6 +28,7 @@
 import io
 import toml
 import requests
+import logging
 from os import environ
 
 from snipsTools import SnipsConfigParser
@@ -44,6 +45,7 @@ HASS_GROUP_ON_SVC = "/api/services/homeassistant/turn_on"
 HASS_GROUP_OFF_SVC = "/api/services/homeassistant/turn_off"
 HASS_AUTOMATION_ON_SVC = "/api/services/automation/turn_on"
 HASS_AUTOMATION_OFF_SVC = "/api/services/automation/turn_off"
+APP_ID = "snips-skill-s710-lights"
 
 # -----------------------------------------------------------------------------
 # class App
@@ -56,12 +58,13 @@ class App(object):
 
     def __init__(self, debug = False):
 
+        self.logger = logging.getLogger(APP_ID)
         self.debug = debug
         self.enable_confirmation = False
 
         # parameters
 
-        self.mqtt_host = None
+        self.mqtt_host = "localhost:1883"
         self.mqtt_user = None
         self.mqtt_pass = None
 
@@ -73,13 +76,13 @@ class App(object):
         try:
             self.config = SnipsConfigParser.read_configuration_file("config.ini")
         except Exception as e:
-            print("Failed to read config.ini ({})".format(e))
+            self.logger.error("Failed to read config.ini ({})".format(e))
             self.config = None
 
         try:
             self.read_toml()
         except Exception as e:
-            print("Failed to read /etc/snips.toml ({})".format(e))
+            self.logger.error("Failed to read /etc/snips.toml ({})".format(e))
 
         # try to use HASSIO token via environment variable & internal API URL in case no config.ini parameters are given
 
@@ -109,7 +112,7 @@ class App(object):
             self.enable_confirmation = True
 
         if self.debug:
-            print("Connecting to {}@{} ...".format(self.mqtt_user, self.mqtt_host))
+            self.logger.debug("Connecting to {}@{} ...".format(self.mqtt_user, self.mqtt_host))
 
         self.start()
 
@@ -168,7 +171,7 @@ class App(object):
 
         if service is not None and data is not None:
             if self.debug:
-                print("Intent {}: Firing service [{} -> {}] with [{}]".format(intent_name, self.hass_host, service, data))
+                self.logger.debug("Intent {}: Firing service [{} -> {}] with [{}]".format(intent_name, self.hass_host, service, data))
 
             r = requests.post(self.hass_host + service, json = data, headers = self.hass_headers)
 
@@ -193,9 +196,6 @@ class App(object):
                 r = requests.post(self.hass_host + service, json = data, headers = self.hass_headers)
 
             self.done(hermes, intent_message, r)
-
-        else:
-          print("Intent {}/parameters not recognized, ignoring".format(intent_name))
 
     # -------------------------------------------------------------------------
     # done
